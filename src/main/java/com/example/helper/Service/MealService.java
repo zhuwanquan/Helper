@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,6 +34,12 @@ public class MealService {
     @Transactional(readOnly = true)
     public Page<Meal> getSelectedMealsPaginated(Pageable pageable) {
         return mealRepository.findByCheckedTrue(pageable);
+    }
+
+    // 根据ID获取菜品（新增方法）
+    @Transactional(readOnly = true)
+    public Optional<Meal> getMealById(Long id) {
+        return mealRepository.findById(id);
     }
 
     // 添加新菜品
