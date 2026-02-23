@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -23,12 +22,6 @@ public interface SystemLogRepository extends JpaRepository<SystemLog, Long> {
      * 根据用户ID查询日志
      */
     Page<SystemLog> findByUserIdOrderByCreatedAtDesc(String userId, Pageable pageable);
-
-    /**
-     * 根据时间范围查询日志
-     */
-    @Query("SELECT sl FROM SystemLog sl WHERE sl.createdAt BETWEEN ?1 AND ?2 ORDER BY sl.createdAt DESC")
-    List<SystemLog> findByCreatedAtBetween(LocalDateTime startTime, LocalDateTime endTime);
 
     /**
      * 统计错误日志数量

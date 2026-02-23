@@ -1,8 +1,6 @@
 // LoggingUtil.java
 package com.example.helper.Common.Util;
 
-import com.example.helper.Common.Enum.BusinessTypeEnum;
-import com.example.helper.Common.Enum.OperationTypeEnum;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -38,24 +36,6 @@ public class LoggingUtil {
     }
 
     /**
-     * 获取当前TraceId
-     */
-    public static String getCurrentTraceId() {
-        return MDC.get(TRACE_ID_KEY);
-    }
-
-    /**
-     * 记录业务日志
-     */
-    public static void logBusiness(String userId, BusinessTypeEnum businessType,
-                                 OperationTypeEnum operationType, String message) {
-        initTraceContext(userId);
-        log.info("业务日志 - 类型: {}, 操作: {}, 消息: {}",
-                businessType.getDescription(), operationType.getDescription(), message);
-        clearTraceContext();
-    }
-
-    /**
      * 记录性能日志
      */
     public static void logPerformance(String methodName, long executeTime) {
@@ -64,15 +44,6 @@ public class LoggingUtil {
         } else {
             log.debug("性能日志 - 方法: {}, 执行时间: {}ms", methodName, executeTime);
         }
-    }
-
-    /**
-     * 记录异常日志
-     */
-    public static void logException(String userId, Exception e) {
-        initTraceContext(userId);
-        log.error("异常日志 - 用户: {}, 异常: {}", userId, e.getMessage(), e);
-        clearTraceContext();
     }
 
     /**
@@ -101,19 +72,6 @@ public class LoggingUtil {
             }
 
             return ip;
-        } catch (Exception e) {
-            return "unknown";
-        }
-    }
-
-    /**
-     * 获取User-Agent
-     */
-    public static String getUserAgent() {
-        try {
-            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-            HttpServletRequest request = attributes.getRequest();
-            return request.getHeader("User-Agent");
         } catch (Exception e) {
             return "unknown";
         }
