@@ -73,9 +73,12 @@ public class AIController {
                                 error -> {
                                     log.error("AI服务出错: {}", error.getMessage(), error);
                                     try {
+                                        // 发送结构化的错误信息（JSON格式）
+                                        String errorData = "{\"error\":true,\"message\":\"处理请求时发生错误: " + 
+                                            error.getMessage().replace("\"", "\\\"").replace("\n", "\\n") + "\"}";
                                         emitter.send(SseEmitter.event()
                                                 .name("error")
-                                                .data("处理请求时发生错误: " + error.getMessage()));
+                                                .data(errorData));
                                     } catch (IOException e) {
                                         log.error("发送错误事件失败: {}", e.getMessage(), e);
                                     }
@@ -210,9 +213,13 @@ public class AIController {
     private void handleError(SseEmitter emitter, Throwable error, String context) {
         log.error("{} AI服务出错: {}", context, error.getMessage(), error);
         try {
+            // 发送结构化的错误信息（JSON格式）
+            String errorData = "{\"error\":true,\"message\":\"" + 
+                context + "处理请求时发生错误: " + 
+                error.getMessage().replace("\"", "\\\"").replace("\n", "\\n") + "\"}";
             emitter.send(SseEmitter.event()
                     .name("error")
-                    .data("处理请求时发生错误: " + error.getMessage()));
+                    .data(errorData));
         } catch (IOException e) {
             log.error("发送错误事件失败: {}", e.getMessage(), e);
         }
